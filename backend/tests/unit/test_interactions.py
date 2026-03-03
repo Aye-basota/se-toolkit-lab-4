@@ -1,3 +1,4 @@
+# pyright: reportPrivateUsage=false
 """Unit tests for interaction filtering logic."""
 
 # pyright: reportPrivateUsage=false
