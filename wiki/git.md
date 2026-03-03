@@ -6,9 +6,12 @@
 - [Remote](#remote)
 - [Commit](#commit)
   - [Commit hash](#commit-hash)
+  - [`<git-commit-hash>`](#git-commit-hash)
   - [Commit message](#commit-message)
-    - [`Conventional Commits`](#conventional-commits)
-      - [Common prefixes in `Conventional Commits`](#common-prefixes-in-conventional-commits)
+  - [`Conventional Commits`](#conventional-commits)
+    - [Common commit message prefixes in `Conventional Commits`](#common-commit-message-prefixes-in-conventional-commits)
+- [`Git` branch](#git-branch)
+  - [`<branch>`](#branch)
 - [Revision](#revision)
 - [How `Git` works - text](#how-git-works---text)
 - [How `Git` works - videos](#how-git-works---videos)
@@ -20,6 +23,8 @@
 - [Configure `Git`](#configure-git)
   - [Configure `user.name`](#configure-username)
   - [Configure `user.email`](#configure-useremail)
+
+<!-- TODO improve docs -->
 
 ## What is `Git`
 
@@ -36,6 +41,8 @@ A remote is a version of your [repository](./github.md#repository) hosted on a [
 
 Remotes let you push and pull changes between your local repository and the remote host.
 
+You can [inspect remotes in `VS Code`](./gitlens.md#inspect-the-remotes).
+
 Docs:
 
 - [Git Remotes](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes)
@@ -50,10 +57,16 @@ A commit is a snapshot of your project at a specific point in time. Each commit 
 
 A hash of a commit in `Git`.
 
+Example: `4aeacb54f898125560c545e5e0477762094027a7`
+
 Docs:
 
 - [Git Has Integrity](https://git-scm.com/book/en/v2/Git-Tools-Revision-Selection#_git_has_integrity)
 - [Revision Selection - Short SHA-1](https://git-scm.com/book/en/v2/Git-Tools-Revision-Selection#_short_sha_1)
+
+### `<git-commit-hash>`
+
+A [commit hash](#commit-hash) (without `<` and `>`).
 
 ### Commit message
 
@@ -66,7 +79,7 @@ Guidelines:
 - Focus on why the change was made, not just what changed.
 - (Optional) follow the [`Conventional Commits`](#conventional-commits) specification.
 
-#### `Conventional Commits`
+### `Conventional Commits`
 
 Rules for creating human- and machine-readable commit history.
 
@@ -74,12 +87,25 @@ Docs:
 
 - [`Conventional Commits`](https://www.conventionalcommits.org/en/v1.0.0/).
 
-##### Common prefixes in `Conventional Commits`
+#### Common commit message prefixes in `Conventional Commits`
 
 - `feat:` for new functionality.
 - `fix:` for bug fixes.
 - `docs:` for documentation changes.
 - `refactor:` for code changes without behavior changes.
+
+## `Git` branch
+
+### `<branch>`
+
+A [`Git` branch](#git-branch) name (without `<` and `>`).
+
+Alternatively, a `Git` branch.
+
+Examples:
+
+- `main`
+- `upstream/main`
 
 ## Revision
 
@@ -173,8 +199,10 @@ Typical sequence:
 1. Create an issue.
 2. Create a branch from `main`.
 3. Commit changes to the branch.
-4. Push branch and open a PR.
-5. Get review and merge.
+4. Push branch.
+5. Open a PR.
+6. Get review.
+7. Merge the branch to `main`.
 
 ## Check your `Git` config
 
