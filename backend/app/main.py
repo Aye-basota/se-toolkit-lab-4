@@ -28,18 +28,21 @@ app.include_router(
     dependencies=[Depends(verify_api_key)],
 )
 
-if settings.enable_interactions:
-    app.include_router(
-        interactions.router,
-        prefix="/interactions",
-        tags=["interactions"],
-        dependencies=[Depends(verify_api_key)],
-    )
-
-if settings.enable_learners:
-    app.include_router(
-        learners.router,
-        prefix="/learners",
-        tags=["learners"],
-        dependencies=[Depends(verify_api_key)],
-    )
+@router.post("/", response_model=InteractionLog, status_code=201)
+async def post_interaction(
+    body: InteractionLogCreate, session: AsyncSession = Depends(get_session)
+):
+    """Create a new interaction log."""
+    try:
+        return await create_interaction(
+            session,
+            learner_id=body.learner_id,
+            item_id=body.item_id,
+            kind=body.kind,
+        )
+    except IntegrityError as exc:
+        await session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(exc.orig),
+        )
