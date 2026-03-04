@@ -1,39 +1,32 @@
-"""Router for interaction endpoints."""
+"""Learning Management Service — FastAPI application."""
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlalchemy.exc import IntegrityError
+from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-from app.database import get_session
-from app.db.interactions import create_interaction, read_interactions
-from app.models.interaction import (
-    InteractionLog,
-    InteractionLogCreate,
-    InteractionModel,
+from app.auth import verify_api_key
+from app.routers import interactions, items, learners
+from app.settings import settings
+
+app = FastAPI(
+    title=settings.app_name,
+    debug=settings.debug,
+    description="A learning management service API.",
+    version="0.1.0",
 )
 
-router = APIRouter()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-
-def filter_by_max_item_id(
-    interactions: list[InteractionLog], max_item_id: int | None
-) -> list[InteractionLog]:
-    """Filter interactions by maximum item ID."""
-    if max_item_id is None:
-        return interactions
-    # BUG FIXED: Using item_id and the correct logic
-    return [i for i in interactions if i.item_id <= max_item_id]
-
-
-@router.get("/", response_model=list[InteractionModel])
-async def get_interactions(
-    max_item_id: int | None = None,
-    session: AsyncSession = Depends(get_session),
-):
-    """Get all interactions, optionally filtered by maximum item ID."""
-    interactions = await read_interactions(session)
-    return filter_by_max_item_id(interactions, max_item_id)
-
+app.include_router(
+    items.router,
+    prefix="/items",
+    tags=["items"],
+    dependencies=[Depends(verify_api_key)],
+)
 
 @router.post("/", response_model=InteractionLog, status_code=201)
 async def post_interaction(
