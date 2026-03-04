@@ -26,7 +26,7 @@ function App() {
     setLoading(true)
     setError(null)
 
-    fetch('/items', {
+    fetch('/items/', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
